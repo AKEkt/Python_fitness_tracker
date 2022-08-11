@@ -142,7 +142,7 @@ class Swimming(Training):
         coeff_2 = 2
         s = self.get_mean_speed()
         w = self.weight
-        return(s + coeff_1) * coeff_2 * w
+        return (s + coeff_1) * coeff_2 * w
 
 
 def read_package(workout_type, data) -> Training:
