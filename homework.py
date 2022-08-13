@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from typing import ClassVar
 
 
@@ -20,9 +20,7 @@ class InfoMessage:
     calories: float
 
     def get_message(self) -> str:
-        return self.MESS.format(self.training_type, self.duration,
-                                self.distance, self.speed, self.calories
-                                )
+        return self.MESS.format(*asdict(self).values())
 
 
 @dataclass
@@ -63,9 +61,9 @@ class Running(Training):
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        coeff_1 = 18
-        coeff_2 = 20
-        t_in_min = self.duration * 60
+        coeff_1: int = 18
+        coeff_2: int = 20
+        t_in_min: float = self.duration * 60
         return (((coeff_1 * self.get_mean_speed() - coeff_2) * self.weight)
                 / self.M_IN_KM * t_in_min)
 
@@ -77,9 +75,9 @@ class SportsWalking(Training):
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        coeff_1 = 0.035
-        coeff_2 = 0.029
-        t_in_min = self.duration * 60
+        coeff_1: float = 0.035
+        coeff_2: float = 0.029
+        t_in_min: float = self.duration * 60
         return ((coeff_1 * self.weight
                 + (self.get_mean_speed()**2 // self.height)
                 * coeff_2 * self.weight)
@@ -101,8 +99,8 @@ class Swimming(Training):
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        coeff_1 = 1.1
-        coeff_2 = 2
+        coeff_1: float = 1.1
+        coeff_2: int = 2
         return (self.get_mean_speed() + coeff_1) * coeff_2 * self.weight
 
 
