@@ -58,29 +58,29 @@ class Training:
 @dataclass
 class Running(Training):
     """Тренировка: бег."""
+    COEFF_1: ClassVar[int] = 18
+    COEFF_2: ClassVar[int] = 20
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        coeff_1: int = 18
-        coeff_2: int = 20
         t_in_min: float = self.duration * 60
-        return (((coeff_1 * self.get_mean_speed() - coeff_2) * self.weight)
-                / self.M_IN_KM * t_in_min)
+        return (((self.COEFF_1 * self.get_mean_speed() - self.COEFF_2)
+                * self.weight) / self.M_IN_KM * t_in_min)
 
 
 @dataclass
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
+    COEFF_1: ClassVar[float] = 0.035
+    COEFF_2: ClassVar[float] = 0.029
     height: float
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        coeff_1: float = 0.035
-        coeff_2: float = 0.029
         t_in_min: float = self.duration * 60
-        return ((coeff_1 * self.weight
+        return ((self.COEFF_1 * self.weight
                 + (self.get_mean_speed()**2 // self.height)
-                * coeff_2 * self.weight)
+                * self.COEFF_2 * self.weight)
                 * t_in_min
                 )
 
@@ -89,6 +89,8 @@ class SportsWalking(Training):
 class Swimming(Training):
     """Тренировка: плавание."""
     LEN_STEP: ClassVar[float] = 1.38
+    COEFF_1: ClassVar[float] = 1.1
+    COEFF_2: ClassVar[int] = 2
     length_pool: float
     count_pool: float
 
@@ -99,9 +101,8 @@ class Swimming(Training):
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        coeff_1: float = 1.1
-        coeff_2: int = 2
-        return (self.get_mean_speed() + coeff_1) * coeff_2 * self.weight
+        return ((self.get_mean_speed() + self.COEFF_1)
+                * self.COEFF_2 * self.weight)
 
 
 def read_package(workout_type: str, data: list) -> Training:
